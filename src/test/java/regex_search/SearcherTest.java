@@ -44,5 +44,7 @@ public class SearcherTest {
         assert p16.parse();
         Searcher p17 = new Searcher("","");
         assert p17.parse();
+        Searcher p18 = new Searcher("*a+a","a");
+        assert p18.parse();
     }
 }
