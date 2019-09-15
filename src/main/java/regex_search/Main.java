@@ -8,6 +8,7 @@ public class Main {
     public static void main(String[] args) {
         if (args.length != 2) {
             System.out.println("Usage: regex_searcher <pattern> <string>");
+            return;
         }
         // first argument is regex pattern
         String pattern = args[0];
@@ -15,7 +16,7 @@ public class Main {
         // second argument is string to be matched
         String stringToMatch = args[1];
 
-        Searcher parser = new Searcher(pattern, stringToMatch);
+        PatternMatcher parser = new PatternMatcher(pattern, stringToMatch);
         System.out.println(parser.matches());
     }
 }
