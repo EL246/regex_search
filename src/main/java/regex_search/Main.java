@@ -3,7 +3,7 @@ package regex_search;
 class Main {
     public static void main(String[] args) {
         if (args.length != 2) {
-            System.out.println("Usage: regex_searcher <pattern> <string>");
+            System.out.println("Usage: regex_search <pattern> <string>");
             return;
         }
         // first argument is regex pattern
