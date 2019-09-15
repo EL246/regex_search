@@ -6,7 +6,6 @@ import java.util.Deque;
 import java.util.List;
 
 class Searcher {
-    //TODO: include '.' ?
     private static final List<Character> specialChars = Arrays.asList('?', '*', '+');
     private String stringToMatch;
     private String pattern;
@@ -38,48 +37,48 @@ class Searcher {
         return false;
     }
 
-    private boolean checkPattern(Pair pair, Deque<Pair> queue) {
-        int i = 0;
-        int j = pair.getIndex();
+    private boolean checkPattern(Pair pair, Deque<Pair> stack) {
+        int patternIndex = 0;
+        int stringIndex = pair.getIndex();
         String pattern = pair.getPattern();
-        while (i < pattern.length() && j < stringToMatch.length()) {
-            char p = pattern.charAt(i);
+        while (patternIndex < pattern.length() && stringIndex < stringToMatch.length()) {
+            char p = pattern.charAt(patternIndex);
             if (specialChars.contains(p)) {
-                processSpecialCharacter(queue, i, j, pattern, p);
+                processSpecialCharacter(stack, patternIndex, stringIndex, pattern, p);
             }
-            char s = stringToMatch.charAt(j);
+            char s = stringToMatch.charAt(stringIndex);
             if (p == '.' || p == s) {
-                i++;
-                j++;
+                patternIndex++;
+                stringIndex++;
             } else {
                 return false;
             }
         }
-        if (pattern.equals("") && j >= stringToMatch.length()) return true;
+        if (pattern.equals("") && stringIndex >= stringToMatch.length()) return true;
         // check if ended before reaching end of pattern or end of string
-        if (i < pair.getPattern().length() && specialChars.contains(pair.getPattern().charAt(i))) {
-            processSpecialCharacter(queue, i, j, pattern, pair.getPattern().charAt(i));
+        if (patternIndex < pair.getPattern().length() && specialChars.contains(pair.getPattern().charAt(patternIndex))) {
+            processSpecialCharacter(stack, patternIndex, stringIndex, pattern, pair.getPattern().charAt(patternIndex));
         }
-        return j >= stringToMatch.length() && i >= pair.getPattern().length();
+        return stringIndex >= stringToMatch.length() && patternIndex >= pair.getPattern().length();
     }
 
-    private void processSpecialCharacter(Deque<Pair> queue, int i, int j, String pattern, char p) {
+    private void processSpecialCharacter(Deque<Pair> stack, int i, int j, String pattern, char p) {
         switch (p) {
             case '?':
                 // check for 0 or 1 instances of following char
 
-                checkForZeroInstances(queue, i, j, pattern);
-                checkForOneInstance(queue, i, j, pattern);
+                checkForZeroInstances(stack, i, j, pattern);
+                checkForOneInstance(stack, i, j, pattern);
                 break;
             case '*':
                 // check for 0+ occurrences of following char
-                checkForZeroInstances(queue, i, j, pattern);
-                checkForMultipleInstances(queue, i, j, pattern);
+                checkForZeroInstances(stack, i, j, pattern);
+                checkForMultipleInstances(stack, i, j, pattern);
 
                 break;
             case '+':
                 // check for 1+ occurrences of following char
-                checkForMultipleInstances(queue, i, j, pattern);
+                checkForMultipleInstances(stack, i, j, pattern);
                 break;
         }
     }
