@@ -3,6 +3,13 @@ package regex_search;
 import java.util.Arrays;
 import java.util.List;
 
+// match char to char
+// . => any single char
+// ? => 0|1 occurrences of following char
+// * => 0+ occurrences of following char
+// + => 1+ occurrences of following char
+// notes: must match entire string
+// don't worry about escaping characters
 class PatternMatcher {
     private static final List<Character> specialChars = Arrays.asList('?', '*', '+');
     private String stringToMatch;
@@ -19,58 +26,45 @@ class PatternMatcher {
     }
 
     boolean matches() {
-        // match char to char // check for match
-        // . => any single char //// skip next character
-        // ? => 0|1 occurrences of following char //// check for '?' or 0/1 occurrences of next string
-        // * => 0+ occurrences of following char ////
-        // + => 1+ occurrences of following char ////
-
-        // notes: must match entire string
-        // don't worry about escaping characters
-
         for (int i = 0; i < pattern.length(); ++i) {
             if (!checkPattern(i)) {
                 return false;
             }
-            //TODO: exit early if checkPattern is false for all indices of the string
         }
-
         return matches[pattern.length()][stringToMatch.length()];
     }
 
     private boolean checkPattern(int patternIndex) {
         boolean foundMatch = false;
-        // if current is special character, skip
+
+        // If current is special character, skip
+        // It is assumed that a special character is always followed by another character
+        // If a special character is the last character in the pattern, return false
         if (specialChars.contains(pattern.charAt(patternIndex))) {
-            matches[patternIndex + 1] = matches[patternIndex];
-            return true;
+            if (patternIndex < pattern.length() - 1) {
+                matches[patternIndex + 1] = matches[patternIndex];
+                return true;
+            } else {
+                return false;
+            }
         }
 
-        //TODO: get special char instead and process al options in switch case
         //TODO: can start string at later index? patternIndex?
-        //TODO: take into account case in which ends in special character, or throw exception? or just note?
         //TODO: instead of having buffer array for empty string, just return true at 0,0?
-        boolean containsSpecialChar = containsSpecialChar(patternIndex);
+        // It is assumed that a special character is always followed by another character
+        Character specialChar = getSpecialCharIfExists(patternIndex);
         for (int i = 0; i <= stringToMatch.length(); ++i) {
-            boolean isMatch;
-            if (containsSpecialChar) {
-                isMatch = processSpecialCharacter(patternIndex, i);
-                matches[patternIndex + 1][i] = isMatch;
-            } else {
-                // check that charactersmatch
-                isMatch = charsMatchAndValidPrevState(patternIndex, i);
-                matches[patternIndex + 1][i] = isMatch;
-            }
+            boolean isMatch = processCharacter(patternIndex, i, specialChar);
+            matches[patternIndex + 1][i] = isMatch;
             foundMatch |= isMatch;
         }
         return foundMatch;
     }
 
-    // TODO: rename this method
     private boolean charsMatchAndValidPrevState(int patternIndex, int stringIndex) {
         if (stringIndex == 0) return false;
         if (matches[patternIndex][stringIndex - 1]) {
-            return charsMatch(patternIndex,stringIndex);
+            return charsMatch(patternIndex, stringIndex);
         }
         return false;
     }
@@ -81,8 +75,7 @@ class PatternMatcher {
                 stringToMatch.charAt(stringIndex - 1) == pattern.charAt(patternIndex);
     }
 
-    private boolean processSpecialCharacter(int patternIndex, int stringIndex) {
-        char specialChar = pattern.charAt(patternIndex - 1);
+    private boolean processCharacter(int patternIndex, int stringIndex, Character specialChar) {
         switch (specialChar) {
             case '?':
                 // check for 0 or 1 instances of following char
@@ -97,12 +90,22 @@ class PatternMatcher {
                 // check for 1+ occurrences of following char
                 return checkForOneInstance(patternIndex, stringIndex) ||
                         checkForMultipleInstances(patternIndex, stringIndex);
+            default:
+                // if no special character, just check whether characters match
+                return charsMatchAndValidPrevState(patternIndex, stringIndex);
         }
-        return false;
     }
 
     private boolean containsSpecialChar(int index) {
         return index > 0 && specialChars.contains(pattern.charAt(index - 1));
+    }
+
+    private Character getSpecialCharIfExists(int patternIndex) {
+        if (containsSpecialChar(patternIndex)) {
+            return pattern.charAt(patternIndex - 1);
+        }
+        // return null character
+        return 0;
     }
 
     //TODO: how to handle string that ends in special character?

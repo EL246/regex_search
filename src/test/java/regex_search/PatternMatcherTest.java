@@ -31,7 +31,7 @@ public class PatternMatcherTest {
         PatternMatcher p11 = new PatternMatcher("ERROR: *.","WARNING: file not found");
         assert !p11.matches();
         PatternMatcher p12 = new PatternMatcher("test?", "test");
-        assert p12.matches();
+        assert !p12.matches();
         PatternMatcher p13 = new PatternMatcher("test*.", "test");
         assert p13.matches();
         PatternMatcher p14 = new PatternMatcher("test.","test");
@@ -48,5 +48,7 @@ public class PatternMatcherTest {
         assert !p19.matches();
         PatternMatcher p20 = new PatternMatcher("?.", "");
         assert p20.matches();
+        PatternMatcher p21 = new PatternMatcher("test+", "test");
+        assert !p21.matches();
     }
 }

@@ -24,7 +24,7 @@ Where:
     * The special-character `+` in the pattern does not match anything, but
   indicates the following character in the pattern can match one or more times.
 
-
+* it is assumed that a `?`, `*`, or `+` will always be followed by another character
 
 Here are some sample messages:
 
