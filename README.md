@@ -13,7 +13,7 @@ pattern matches the entire string. Otherwise, it returns false.
 
 Where:
 * `<pattern>` is mandatory, and is a string pattern
-* `<string>` is mandatory, the string that matches the pattern
+* `<string>` is mandatory, and is the string that is checked against the pattern
 * `<pattern>` supports the following patterns and special characters: 
 
     * A non-special character in a pattern matches only that character.
@@ -42,8 +42,8 @@ To start the application, you can compile and run the source code.
 
 ## Running the tests
 
-JUnit testing framework was used for this project. To run the tests simply run the commands below in the project directory.
-Maven should be [installed](https://maven.apache.org/download.cgi) for this to work. 
+JUnit testing framework was used for this project. To run the tests simply run the PatternMatcherTest.
+Maven can be used for this, with the following commands:  
 
 ````
 mvn clean

@@ -38,10 +38,7 @@ class PatternMatcher {
 
         // Create new boolean array for current pattern index.
         boolean[] curMatches = new boolean[stringToMatch.length() + 1];
-
-        // It is assumed that a special character is always followed by another character.
         Character specialChar = getSpecialCharIfExists(patternIndex);
-
         for (int i = 0; i <= stringToMatch.length(); ++i) {
             boolean isMatch = processCharacter(patternIndex, i, specialChar, curMatches);
             curMatches[i] = isMatch;
