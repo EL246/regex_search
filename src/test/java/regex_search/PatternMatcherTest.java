@@ -50,5 +50,7 @@ public class PatternMatcherTest {
         assert p20.matches();
         PatternMatcher p21 = new PatternMatcher("test+", "test");
         assert !p21.matches();
+        PatternMatcher p22 = new PatternMatcher("","a");
+        assert !p22.matches();
     }
 }

@@ -1,10 +1,6 @@
 package regex_search;
 
-/**
- *
- *
- */
-public class Main {
+class Main {
     public static void main(String[] args) {
         if (args.length != 2) {
             System.out.println("Usage: regex_searcher <pattern> <string>");

@@ -4,7 +4,8 @@ regex_search is a pattern matcher that checks whether a given string matches a g
 
 ## Usage
 
-regex_search accepts two arguments, a pattern to be matched and a string:
+regex_search accepts two arguments, a pattern to be matched and a string. It returns true if the
+pattern matches the entire string. Otherwise, it returns false.
 
 ```
 <pattern> <string>
