@@ -7,14 +7,14 @@ class PatternMatcher {
     private static final List<Character> SPECIAL_CHARS = Arrays.asList('?', '*', '+');
     final private String stringToMatch;
     final private String pattern;
-    private boolean[] matches;
+    private boolean[] prevMatches;
 
     PatternMatcher(String pattern, String stringToMatch) {
         this.stringToMatch = stringToMatch;
         this.pattern = pattern;
-        this.matches = new boolean[stringToMatch.length() + 1];
-        // Index 0 is for an empty string, two empty strings match at matches[0,0].
-        matches[0] = true;
+        this.prevMatches = new boolean[stringToMatch.length() + 1];
+        // Index 0 is for an empty string, two empty strings match at prevMatches[0].
+        prevMatches[0] = true;
     }
 
     boolean matches() {
@@ -23,13 +23,13 @@ class PatternMatcher {
                 return false;
             }
         }
-        return matches[stringToMatch.length()];
+        return prevMatches[stringToMatch.length()];
     }
 
     private boolean checkPattern(int patternIndex) {
         boolean foundMatch = false;
 
-        // If current is special character, matches array stays the same.
+        // If current is special character, prevMatches array stays the same.
         // It is assumed that a special character is always followed by another character.
         // If a special character is the last character in the pattern, return false.
         if (SPECIAL_CHARS.contains(pattern.charAt(patternIndex))) {
@@ -47,14 +47,14 @@ class PatternMatcher {
             curMatches[i] = isMatch;
             foundMatch |= isMatch;
         }
-        // Update matches array with new values.
-        matches = curMatches;
+        // Update prevMatches array with new values.
+        prevMatches = curMatches;
         return foundMatch;
     }
 
     private boolean charsMatchAndValidPrevState(int patternIndex, int stringIndex) {
         if (stringIndex == 0) return false;
-        if (matches[stringIndex - 1]) {
+        if (prevMatches[stringIndex - 1]) {
             return charsMatch(patternIndex, stringIndex);
         }
         return false;
@@ -101,8 +101,8 @@ class PatternMatcher {
 
     private boolean checkForZeroInstances(int patternIndex, int stringIndex) {
         // True if previous string index matched previous pattern.
-        // Check same column, row above.
-        return matches[stringIndex];
+        // Check same column in prevMatches.
+        return prevMatches[stringIndex];
     }
 
     private boolean checkForOneInstance(int patternIndex, int stringIndex) {
