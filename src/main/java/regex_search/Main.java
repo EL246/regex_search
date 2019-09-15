@@ -16,6 +16,6 @@ public class Main {
         String stringToMatch = args[1];
 
         Searcher parser = new Searcher(pattern, stringToMatch);
-        System.out.println(parser.parse());
+        System.out.println(parser.matches());
     }
 }

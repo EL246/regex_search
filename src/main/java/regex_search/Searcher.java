@@ -15,7 +15,7 @@ class Searcher {
         this.pattern = pattern;
     }
 
-    boolean parse() {
+    boolean matches() {
         // match char to char // check for match
         // . => any single char //// skip next character
         // ? => 0|1 occurrences of following char //// check for '?' or 0/1 occurrences of next string
