@@ -52,20 +52,6 @@ class PatternMatcher {
         return foundMatch;
     }
 
-    private boolean charsMatchAndValidPrevState(int patternIndex, int stringIndex) {
-        if (stringIndex == 0) return false;
-        if (prevMatches[stringIndex - 1]) {
-            return charsMatch(patternIndex, stringIndex);
-        }
-        return false;
-    }
-
-    private boolean charsMatch(int patternIndex, int stringIndex) {
-        if (stringIndex == 0) return false;
-        return pattern.charAt(patternIndex) == '.' ||
-                stringToMatch.charAt(stringIndex - 1) == pattern.charAt(patternIndex);
-    }
-
     private boolean processCharacter(int patternIndex, int stringIndex, Character specialChar, boolean[] curMatches) {
         switch (specialChar) {
             case '?':
@@ -87,16 +73,30 @@ class PatternMatcher {
         }
     }
 
-    private boolean containsSpecialChar(int index) {
-        return index > 0 && SPECIAL_CHARS.contains(pattern.charAt(index - 1));
-    }
-
     private Character getSpecialCharIfExists(int patternIndex) {
         if (containsSpecialChar(patternIndex)) {
             return pattern.charAt(patternIndex - 1);
         }
         // Return null character if not special character
         return 0;
+    }
+
+    private boolean containsSpecialChar(int index) {
+        return index > 0 && SPECIAL_CHARS.contains(pattern.charAt(index - 1));
+    }
+
+    private boolean charsMatchAndValidPrevState(int patternIndex, int stringIndex) {
+        if (stringIndex == 0) return false;
+        if (prevMatches[stringIndex - 1]) {
+            return charsMatch(patternIndex, stringIndex);
+        }
+        return false;
+    }
+
+    private boolean charsMatch(int patternIndex, int stringIndex) {
+        if (stringIndex == 0) return false;
+        return pattern.charAt(patternIndex) == '.' ||
+                stringToMatch.charAt(stringIndex - 1) == pattern.charAt(patternIndex);
     }
 
     private boolean checkForZeroInstances(int patternIndex, int stringIndex) {
