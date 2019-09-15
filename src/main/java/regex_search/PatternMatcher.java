@@ -101,7 +101,7 @@ class PatternMatcher {
 
     private boolean checkForZeroInstances(int patternIndex, int stringIndex) {
         // True if previous string index matched previous pattern.
-        // Check same column in prevMatches.
+        // Check same index in prevMatches.
         return prevMatches[stringIndex];
     }
 

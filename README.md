@@ -49,5 +49,3 @@ Maven should be [installed](https://maven.apache.org/download.cgi) for this to w
 mvn clean
 mvn test
 ````
-
-# Design Rationale
