@@ -32,7 +32,7 @@ Here are some sample messages:
 `"a.c" "abc"` should return true.
 `"adc" "abc"` should return false.
 
-Possible server responses codes are `true` or `false`.
+Possible responses codes are `true` or `false`.
 
 ## Getting Started
 
