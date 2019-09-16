@@ -8,7 +8,7 @@ regex_search accepts two arguments, a pattern to be matched and a string. It ret
 pattern matches the entire string. Otherwise, it returns false.
 
 ```
-<pattern> <string>
+java regex_search.Main <pattern> <string>
 ```
 
 Where:
@@ -40,6 +40,9 @@ Possible responses are `true` or `false`.
 To start the application, you can compile and run the source code. Run with -ea (-enableassertions) 
 flag to enable assertions.
 
+```
+java -ea regex_search.Main <pattern> <string>
+```
 
 ## Running the tests
 
