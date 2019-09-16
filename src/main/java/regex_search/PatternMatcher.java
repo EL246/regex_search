@@ -31,7 +31,7 @@ class PatternMatcher {
     private boolean checkPatternMatch(int patternIndex) {
         boolean foundMatch = false;
 
-        // If current is special character, prevMatches array stays the same.
+        // If current index is special character, prevMatches array stays the same.
         // It is assumed that a special character is always followed by another character.
         // If a special character is the last character in the pattern, return false.
         if (SPECIAL_CHARS.contains(pattern.charAt(patternIndex))) {
@@ -40,7 +40,8 @@ class PatternMatcher {
 
         // Create new boolean array for current pattern index matches.
         boolean[] curMatches = new boolean[stringToMatch.length() + 1];
-        Character specialChar = getSpecialCharIfExists(patternIndex);
+        // Check whether the current index is preceded by a special character.
+        Character specialChar = getSpecialCharIfPrecedes(patternIndex);
         // Iterate through all characters in the stringToMatch. Index 0 represents an empty string.
         for (int i = 0; i <= stringToMatch.length(); ++i) {
             boolean isMatch = processCharacter(patternIndex, i, specialChar, curMatches);
@@ -74,15 +75,17 @@ class PatternMatcher {
         }
     }
 
-    private Character getSpecialCharIfExists(int patternIndex) {
-        if (containsSpecialChar(patternIndex)) {
+    private Character getSpecialCharIfPrecedes(int patternIndex) {
+        // Check whether the current index is preceded by a special character.
+        if (precededBySpecialChar(patternIndex)) {
             return pattern.charAt(patternIndex - 1);
         }
-        // Return null character if not special character
+        // Return null character if not special character.
         return 0;
     }
 
-    private boolean containsSpecialChar(int index) {
+    private boolean precededBySpecialChar(int index) {
+        // Check whether the current index is preceded by a special character.
         return index > 0 && SPECIAL_CHARS.contains(pattern.charAt(index - 1));
     }
 
@@ -106,12 +109,12 @@ class PatternMatcher {
     }
 
     private boolean checkForOneInstance(int patternIndex, int stringIndex) {
-        // True if previous string index matched previous pattern, and current characters match.
+        // Return true if previous string index matched previous pattern, and current characters match.
         return charsMatchAndValidPrevState(patternIndex, stringIndex);
     }
 
     private boolean checkForMultipleInstances(int patternIndex, int stringIndex, boolean[] curMatches) {
-        // True if previous char in string matched this pattern, and current character does as well.
+        // Return true if previous char in string matched this pattern, and current character does as well.
         boolean prevCharMatched = stringIndex > 0 && curMatches[stringIndex - 1];
         return prevCharMatched && charsMatch(patternIndex, stringIndex);
     }
