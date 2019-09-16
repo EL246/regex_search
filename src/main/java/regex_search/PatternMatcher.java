@@ -13,20 +13,22 @@ class PatternMatcher {
         this.stringToMatch = stringToMatch;
         this.pattern = pattern;
         this.prevMatches = new boolean[stringToMatch.length() + 1];
-        // Index 0 is for an empty string, two empty strings match at prevMatches[0].
+        // Index 0 is set to true for an empty pattern matching an empty string.
         prevMatches[0] = true;
     }
 
     boolean matches() {
+        // Iterate through each index of the pattern to check if the pattern matches the string
         for (int i = 0; i < pattern.length(); ++i) {
-            if (!checkPattern(i)) {
+            // If no matches are found for the current pattern index, return false since no subsequent match is possible.
+            if (!checkPatternMatch(i)) {
                 return false;
             }
         }
         return prevMatches[stringToMatch.length()];
     }
 
-    private boolean checkPattern(int patternIndex) {
+    private boolean checkPatternMatch(int patternIndex) {
         boolean foundMatch = false;
 
         // If current is special character, prevMatches array stays the same.
@@ -36,9 +38,10 @@ class PatternMatcher {
             return patternIndex < pattern.length() - 1;
         }
 
-        // Create new boolean array for current pattern index.
+        // Create new boolean array for current pattern index matches.
         boolean[] curMatches = new boolean[stringToMatch.length() + 1];
         Character specialChar = getSpecialCharIfExists(patternIndex);
+        // Iterate through all characters in the stringToMatch. Index 0 represents an empty string.
         for (int i = 0; i <= stringToMatch.length(); ++i) {
             boolean isMatch = processCharacter(patternIndex, i, specialChar, curMatches);
             curMatches[i] = isMatch;
@@ -46,6 +49,7 @@ class PatternMatcher {
         }
         // Update prevMatches array with new values.
         prevMatches = curMatches;
+        // Return whether any matches were found at this index
         return foundMatch;
     }
 
@@ -53,11 +57,11 @@ class PatternMatcher {
         switch (specialChar) {
             case '?':
                 // Check for 0 or 1 instances of following char.
-                return checkForZeroInstances(patternIndex, stringIndex) ||
+                return checkForZeroInstances(stringIndex) ||
                         checkForOneInstance(patternIndex, stringIndex);
             case '*':
                 // Check for 0+ occurrences of following char.
-                return checkForZeroInstances(patternIndex, stringIndex) ||
+                return checkForZeroInstances(stringIndex) ||
                         checkForOneInstance(patternIndex, stringIndex) ||
                         checkForMultipleInstances(patternIndex, stringIndex, curMatches);
             case '+':
@@ -83,8 +87,7 @@ class PatternMatcher {
     }
 
     private boolean charsMatchAndValidPrevState(int patternIndex, int stringIndex) {
-        if (stringIndex == 0) return false;
-        if (prevMatches[stringIndex - 1]) {
+        if (stringIndex == 0 || prevMatches[stringIndex - 1]) {
             return charsMatch(patternIndex, stringIndex);
         }
         return false;
@@ -96,8 +99,8 @@ class PatternMatcher {
                 stringToMatch.charAt(stringIndex - 1) == pattern.charAt(patternIndex);
     }
 
-    private boolean checkForZeroInstances(int patternIndex, int stringIndex) {
-        // True if previous string index matched previous pattern.
+    private boolean checkForZeroInstances(int stringIndex) {
+        // Return true if previous string index matched previous pattern.
         // Check same index in prevMatches.
         return prevMatches[stringIndex];
     }
@@ -108,7 +111,7 @@ class PatternMatcher {
     }
 
     private boolean checkForMultipleInstances(int patternIndex, int stringIndex, boolean[] curMatches) {
-        // True if previous char in string matched this pattern, and current string does as well.
+        // True if previous char in string matched this pattern, and current character does as well.
         boolean prevCharMatched = stringIndex > 0 && curMatches[stringIndex - 1];
         return prevCharMatched && charsMatch(patternIndex, stringIndex);
     }

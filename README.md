@@ -33,11 +33,12 @@ Here are some sample messages:
 `"a.c" "abc"` should return true.
 `"adc" "abc"` should return false.
 
-Possible responses codes are `true` or `false`.
+Possible responses are `true` or `false`.
 
 ## Getting Started
 
-To start the application, you can compile and run the source code.
+To start the application, you can compile and run the source code. Run with -ea (-enableassertions) 
+flag to enable assertions.
 
 
 ## Running the tests
